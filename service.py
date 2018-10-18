@@ -42,6 +42,7 @@ def handler(event, context):
         output = subprocess.check_output(command, shell=True, stderr=subprocess.STDOUT)
         print('Finish')
         # upload predictions to bucket
+        print(output)
         predictionsFile = '{}.png'.format(os.path.splitext(imageFile)[0])
         predictionsKey = 'predictions/{}'.format(predictionsFile)
         uploadToS3(predictionsPath, strBucket, predictionsKey)

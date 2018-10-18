@@ -1,13 +1,34 @@
-service: lambda
+service: darknet
 
 frameworkVersion: ">=1.2.0 <2.0.0"
 
+custom:
+  bucket: BUCKET
+
 provider:
   name: aws
+  region: us-east-2
   runtime: python2.7
   memorySize: 1536
   timeout: 600
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "s3:GetObject"
+        - "s3:GetObjectAcl"
+        - "s3:PutObject"
+        - "s3:PutObjectAcl"
+      Resource: "arn:aws:s3:::${self:custom.bucket}/*"
 
 functions:
-  main:
+  detect:
     handler: service.handler
+    events:
+      - existingS3:
+          bucket: "${self:custom.bucket}"
+          event: s3:ObjectCreated:*
+          rules:
+            - prefix: uploads/
+            - suffix: .jpg
+            - suffix: .jpeg
+            - suffix: .png

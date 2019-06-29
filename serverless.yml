@@ -28,7 +28,7 @@ functions:
           bucket: "${self:custom.bucket}"
           event: s3:ObjectCreated:*
           rules:
-            - prefix: uploads/
+            - prefix: resized/
             - suffix: .jpg
             - suffix: .jpeg
             - suffix: .png
